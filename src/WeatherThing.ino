@@ -26,29 +26,29 @@ BlinkPattern::Pattern<2> panic{{1,1},25};
 BlinkPattern::Pattern<2> start{{1,9},25};
 BlinkPattern::Pattern<2> normal{{1,39},25};
 
-void setup() 
+void setup()
 {
   Serial.begin(230400);
   Serial.println();
-  Serial.println("Client:" + thing.clientId());
+  Serial.println("ClientID:" + thing.clientId());
 
   led.setPattern(start);
-  
+
   thing.onStateChange([](const String& msg){
     Serial.println(msg);
   });
 
-  thing.addSensor(String("sensor/dht11/") + thing.clientId() + "/humidity", 5000, [](Value& value){
+  thing.addSensor(thing.clientId() + "/ws/dht11/humidity", 5000, [](Value& value){
     value = dht11.humidity();
     Serial.println(String("dht11 humidity ") + (float)value);
   });
 
-  thing.addSensor(String("sensor/dht11/") + thing.clientId() + "/temperature", 5000, [](Value& value){
+  thing.addSensor(thing.clientId() + "/ws/dht11/temperature", 5000, [](Value& value){
     value = dht11.temperature();
     Serial.println(String("dht11 temperature ") + (float)value);
   });
 
-  thing.addSensor(String("sensor/ds18b20/") + thing.clientId() + "/temperature", 5000, [](Value& value){
+  thing.addSensor(thing.clientId() + "/ws/ds18b20/temperature", 5000, [](Value& value){
     Return<float> temperature = ds.temperature();
     if (!temperature.valid())
     {
@@ -61,11 +61,8 @@ void setup()
     value = (float)temperature;
   });
 
-  String display;
-  display += "display/sht30/";
-  display += thing.clientId();
-  thing.addActuator(display, [](Value& value){
-    //Serial.println("Got " +(String) value);
+  thing.addActuator(thing.clientId() + "/ws/display", [](Value& value){
+    Serial.println("Got " + String(value));
   });
 
   ds.begin();
