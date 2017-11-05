@@ -38,6 +38,8 @@ void setup()
     Serial.println(msg);
   });
 
+  thing.begin();
+
   thing.addSensor(thing.clientId() + "/ws/dht11/humidity", 5000, [](Value& value){
     value = dht11.humidity();
     Serial.println(String("dht11 humidity ") + (float)value);
@@ -66,7 +68,6 @@ void setup()
   });
 
   ds.begin();
-  thing.begin();
 }
 
 void loop()
