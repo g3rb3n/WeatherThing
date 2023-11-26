@@ -4,6 +4,7 @@
 #include <DHT11.h>
 
 using namespace g3rb3n;
+using namespace ootb;
 
 typedef unsigned int uint;
 typedef unsigned long ulong;
@@ -40,17 +41,17 @@ void setup()
 
   thing.begin();
 
-  thing.addSensor(thing.clientId() + "/ws/dht11/humidity", 5000, [](Value& value){
+  thing.addSensor("things/" + thing.clientId() + "/ws/dht11/humidity", 5000, [](Value& value){
     value = dht11.humidity();
     Serial.println(String("dht11 humidity ") + (float)value);
   });
 
-  thing.addSensor(thing.clientId() + "/ws/dht11/temperature", 5000, [](Value& value){
+  thing.addSensor("things/" + thing.clientId() + "/ws/dht11/temperature", 5000, [](Value& value){
     value = dht11.temperature();
     Serial.println(String("dht11 temperature ") + (float)value);
   });
 
-  thing.addSensor(thing.clientId() + "/ws/ds18b20/temperature", 5000, [](Value& value){
+  thing.addSensor("things/" + thing.clientId() + "/ws/ds18b20/temperature", 5000, [](Value& value){
     Return<float> temperature = ds.temperature();
     if (!temperature.valid())
     {
@@ -63,7 +64,7 @@ void setup()
     value = (float)temperature;
   });
 
-  thing.addActuator(thing.clientId() + "/ws/display", [](Value& value){
+  thing.addActuator("things/" + thing.clientId() + "/ws/display", [](Value& value){
     Serial.println("Got " + String(value));
   });
 

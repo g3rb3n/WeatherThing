@@ -1,2 +1,2 @@
 # SHT30Thing
-A simple SHT30 temperature / humidity sensor thing for MQTT.
+A simple DS18D20 + SHT30 temperature / humidity sensor thing for MQTT.
