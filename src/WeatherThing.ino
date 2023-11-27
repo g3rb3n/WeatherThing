@@ -33,6 +33,8 @@ void setup()
   Serial.println();
   Serial.println("ClientID:" + thing.clientId());
 
+  dht11.setup();
+  led.begin();
   led.setPattern(start);
 
   thing.onStateChange([](const String& msg){
@@ -42,13 +44,31 @@ void setup()
   thing.begin();
 
   thing.addSensor("things/" + thing.clientId() + "/ws/dht11/humidity", 5000, [](Value& value){
-    value = dht11.humidity();
-    Serial.println(String("dht11 humidity ") + (float)value);
+    int humidity = 0;
+    bool ok = dht11.humidity(humidity);
+    if(ok)
+    {
+        value = humidity;
+        Serial.println(String("dht11 humidity ") + (float)value);
+    }
+    else
+    {
+        Serial.println("Error reading dht11 humidity ");
+    }
   });
 
   thing.addSensor("things/" + thing.clientId() + "/ws/dht11/temperature", 5000, [](Value& value){
-    value = dht11.temperature();
-    Serial.println(String("dht11 temperature ") + (float)value);
+    int temperature = 0;
+    bool ok = dht11.temperature(temperature);
+    if(ok)
+    {
+        value = temperature;
+        Serial.println(String("dht11 temperature ") + (float)value);
+    }
+    else
+    {
+        Serial.println("Error reading dht11 temperature ");
+    }
   });
 
   thing.addSensor("things/" + thing.clientId() + "/ws/ds18b20/temperature", 5000, [](Value& value){
